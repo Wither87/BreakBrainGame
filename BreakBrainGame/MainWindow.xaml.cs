@@ -10,7 +10,7 @@ namespace BreakBrainGame
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window, IGame
     {
         // Необходимые поля для 1 уровня
         const int _time = 15;
@@ -33,7 +33,7 @@ namespace BreakBrainGame
         /// </summary>
         /// <returns></returns>
         Button LVL1_CreateButton() {
-            Button but = new Button { Width = 200, Height = 200, FontSize = 25, Content = "ЖМяк", };
+            Button but = new Button { Width = 100, Height = 100, FontSize = 25, Content = "ЖМяк", };
             but.Click += LVL1_But_Click;
             return but;
         }
@@ -43,7 +43,7 @@ namespace BreakBrainGame
         /// </summary>
         /// <returns></returns>
         Label LVL1_CreateLabel() {
-            Label lbl = new Label { VerticalAlignment = VerticalAlignment.Top, Width = 200, Height = 200, FontSize = 20, };
+            Label lbl = new Label { VerticalAlignment = VerticalAlignment.Top, HorizontalAlignment = HorizontalAlignment.Left, Width = 300, Height = 60, FontSize = 15, };
             return lbl;
         }
 
@@ -66,7 +66,7 @@ namespace BreakBrainGame
         /// Запуск таймера.
         /// </summary>
         private void LVL1_Timer() {
-            lbl.Content = time;
+            lbl.Content = $"Время до переустановки винды: {time}";
             timer.Interval = new TimeSpan(10000000);
             timer.Start();
         }
@@ -81,7 +81,7 @@ namespace BreakBrainGame
                 case 1: but.Content = "Тык"; break;
                 case 2: but.Height = 40; break;
                 case 3: but.Height = 10; but.Width = 10; but.HorizontalAlignment = HorizontalAlignment.Right; break;
-                case 4: but.Content = "Не ЖмЯкАй((("; but.HorizontalAlignment = HorizontalAlignment.Left; but.VerticalAlignment = VerticalAlignment.Top; but.Width = 120; but.Height = 55; but.FontSize = 20; Margin = new Thickness(10); break;
+                case 4: but.Content = "Не ЖмЯкАй((("; but.HorizontalAlignment = HorizontalAlignment.Left; but.VerticalAlignment = VerticalAlignment.Bottom; but.Width = 120; but.Height = 55; but.FontSize = 20; Margin = new Thickness(10); break;
                 case 5: MessageBox.Show("Не жмякай!!!"); break;
                 case 6: but.HorizontalAlignment = HorizontalAlignment.Center; but.VerticalAlignment = VerticalAlignment.Center; but.Width = 180; but.FontSize = 25; but.Content = "Ahhh, sempai..."; break;
                 case 7: MessageBox.Show("Бака!!"); MessageBox.Show("Бака!!"); MessageBox.Show("Бака!!"); MessageBox.Show("Бака!!"); MessageBox.Show("Бака!!"); break;
@@ -97,15 +97,21 @@ namespace BreakBrainGame
                         Content = "Ты же понимаешь что тебе будет плохо, если жмякнешь ещё раз",
                     };
                     gameGrid.Children.Add(label);
+                    label.MouseLeftButtonUp += Label_MouseLeftButtonUp;
                     break;
                 case 9: 
                     MessageBox.Show("Я тебя предупреждал!");
-                    if(time != _time)
-                        for (int i = 0; i < 10; Process.Start("notepad"), i++);
+                    if (time != _time)
+                        for (int i = 0; i < 10; Process.Start("notepad"), i++) ;
                     break;
             }
         }
-        
+
+        private void Label_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            timer.Stop(); ClearLvL(); numberLVL++; LVL2_Load();
+        }
+
         /// <summary>
         /// Действия на каждый тик таймера.
         /// </summary>
@@ -114,17 +120,17 @@ namespace BreakBrainGame
         private void LVL1_Timer_Tick(object sender, EventArgs e)
         {
             time--;
-            lbl.Content = time;
+            lbl.Content = $"Время до переустановки винды: {time}";
             if(time > 0) {
-                if (clickCount >= 10) { timer.Stop(); ClearLvL(); numberLVL++; LVL2_Load(); }
+                if (clickCount >= 10) { timer.Stop(); }
             }
             else { timer.Stop(); clickCount = 0; time = _time; ClearLvL(); LVL1_Load(); }
         }
-        
+
         /// <summary>
         /// Загружает первый уровень на форму.
         /// </summary>
-        void LVL1_Load() {
+        public void LVL1_Load() {
             but = LVL1_CreateButton();          // Кнопка для жмяков
             gameGrid.Children.Add(but);
 
@@ -242,7 +248,7 @@ namespace BreakBrainGame
         /// <summary>
         /// Загружает второй уровень на форму.
         /// </summary>
-        void LVL2_Load()
+        public void LVL2_Load()
         {
             gameGrid.ColumnDefinitions.Add(new ColumnDefinition());
             gameGrid.ColumnDefinitions.Add(new ColumnDefinition());
@@ -356,7 +362,7 @@ namespace BreakBrainGame
         /// <summary>
         /// Загружает третий уровень на форму.
         /// </summary>
-        void LVL3_Load()
+        public void LVL3_Load()
         {
             CreateLVLlabel();
         }
@@ -364,7 +370,7 @@ namespace BreakBrainGame
         /// <summary>
         /// Полностью очищает форму.
         /// </summary>
-        void ClearLvL() {
+        public void ClearLvL() {
             if(gameGrid.Children.Count != 0) {
                 int lenghtGridChildren = gameGrid.Children.Count - 1;           // Количество элементов в игровом Гриде.
                 for (int i = lenghtGridChildren; i >= 0; i--)
@@ -390,7 +396,7 @@ namespace BreakBrainGame
         /// <summary>
         /// Вывод номера уровня.
         /// </summary>
-        void CreateLVLlabel() {
+        public void CreateLVLlabel() {
             numberLVLlabel = new Label { Content = $"Уровень {numberLVL}", FontSize = 25, };
             numberLVLGrid.Children.Add(numberLVLlabel);
         }
