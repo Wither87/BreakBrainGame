@@ -13,6 +13,54 @@ namespace BreakBrainGame
     /// </summary>
     public partial class MainWindow : Window, IGame
     {
+        int messageValue = 0;
+
+        void CheckMessageValue() {
+            switch (messageValue)
+            {
+                case 6:  MessageBox.Show("Прости если я тебе мешаю играть)"); messageValue++; break;
+                case 10: MessageBox.Show("Ну как тебе игра?)"); messageValue++; break;
+                case 15: MessageBox.Show("Я тебе ещё не надоел?)"); messageValue++; break;
+            }
+        }
+
+        /// <summary>
+        /// Полностью очищает форму.
+        /// </summary>
+        public void ClearLvL()
+        {
+            if (gameGrid.Children.Count != 0) {
+                int lenghtGridChildren = gameGrid.Children.Count - 1;           // Количество элементов в игровом Гриде.
+                for (int i = lenghtGridChildren; i >= 0; i--)
+                    gameGrid.Children.RemoveAt(i);
+            }
+            if (gameGrid.ColumnDefinitions.Count != 0) {
+                int countGridColumn = gameGrid.ColumnDefinitions.Count - 1;     // Количество столбцов в игровом Гриде.
+                for (int i = countGridColumn; i >= 0; i--)
+                    gameGrid.ColumnDefinitions.RemoveAt(i);
+            }
+            if (gameGrid.RowDefinitions.Count != 0) {
+                int countGridrow = gameGrid.RowDefinitions.Count - 1;           // Количество строк в игровом Гриде.
+                for (int i = countGridrow; i >= 0; i--)
+                    gameGrid.RowDefinitions.RemoveAt(i);
+            }
+            if (numberLVLGrid.Children.Count != 0) {
+                int lenghtGridChildren = numberLVLGrid.Children.Count - 1;      // Количество элементов в Гриде с номером уровня.
+                for (int i = lenghtGridChildren; i >= 0; i--)
+                    numberLVLGrid.Children.RemoveAt(i);
+            }
+        }
+
+        /// <summary>
+        /// Вывод номера уровня.
+        /// </summary>
+        public void CreateLVLlabel() {
+            numberLVLlabel = new Label { Content = $"Уровень {numberLVL}", FontSize = 15, };
+            numberLVLGrid.Children.Add(numberLVLlabel);
+        }
+
+
+
         // Необходимые поля для 1 уровня
         const int _time = 15;
         int time = _time;
@@ -82,9 +130,9 @@ namespace BreakBrainGame
                 case 2: but.Content = "Жмяк"; break;
                 case 3: but.Height = 10; but.Width = 10; Grid.SetRow(but, 1); Grid.SetColumn(but, 3); break;
                 case 4: but.Height = butSize; but.Width = butSize; but.Content = "Не ЖмЯкАй((("; but.FontSize = 17; Margin = new Thickness(10); Grid.SetRow(but, 4); Grid.SetColumn(but, 4); break;
-                case 5: MessageBox.Show("Не жмякай!!!"); break;
+                case 5: MessageBox.Show("Не жмякай!!!"); messageValue++; CheckMessageValue(); break;
                 case 6: but.Width = 200; but.FontSize = 20; but.Content = "Ahhh, sempai..."; Grid.SetRow(but, 1); Grid.SetColumn(but, 0); Grid.SetColumnSpan(but, 2); break;
-                case 7: MessageBox.Show("Бака!!"); MessageBox.Show("Бака!!"); MessageBox.Show("Бака!!"); MessageBox.Show("Бака!!"); MessageBox.Show("Бака!!"); break;
+                case 7: MessageBox.Show("Бака!!"); MessageBox.Show("Бака!!"); MessageBox.Show("Бака!!"); MessageBox.Show("Бака!!"); MessageBox.Show("Бака!!"); messageValue++; CheckMessageValue(); break;
                 case 8: 
                     but.Height = butSize;
                     but.Width = butSize;
@@ -104,6 +152,8 @@ namespace BreakBrainGame
                     break;
                 case 9: 
                     MessageBox.Show("Я тебя предупреждал!");
+                    messageValue++;
+                    CheckMessageValue();
                     if (time != _time)
                         for (int i = 0; i < 3; Process.Start("notepad"), i++) ;
                     break;
@@ -166,6 +216,10 @@ namespace BreakBrainGame
             timer = new DispatcherTimer();      // Таймер
             timer.Tick += LVL1_Timer_Tick;
             CreateLVLlabel();                   // Отображение номера уровня
+
+            MessageBox.Show("Привеет))");
+            messageValue++;
+            CheckMessageValue();
         }
          
 // ---------------------------------------------------------------------------------------------------------------------------------------------------- //
@@ -209,7 +263,7 @@ namespace BreakBrainGame
         /// </summary>
         /// <returns></returns>
         Button LVL2_CreateButton() {
-            Button but = new Button { FontSize = 20, };
+            Button but = new Button { FontSize = 20, Margin = new Thickness(10), };
             return but;
         }
 
@@ -255,7 +309,12 @@ namespace BreakBrainGame
         private void But4_Click(object sender, RoutedEventArgs e) {
             but4Click++;
             lbl4.Content = but4Click;
-            if (but4Click == 8) MessageBox.Show("Собери пазл))");   // Подсказка
+            if (but4Click == 8) {
+                MessageBox.Show("Собери пазл))");
+                messageValue++;
+                CheckMessageValue();
+            }                                       // Подсказка
+
             if (but4Click >= 15) but4Click = 0;     // Обнулять счётчик
         }
 
@@ -301,7 +360,6 @@ namespace BreakBrainGame
             but1 = LVL2_CreateButton();
             but1.Content = 1;
             but1.Click += But1_Click;
-            but1.Margin = new Thickness(10);
             Grid.SetRow(but1, 0);
             Grid.SetColumn(but1, 0);
             gameGrid.Children.Add(but1);
@@ -317,7 +375,6 @@ namespace BreakBrainGame
             but2 = LVL2_CreateButton();
             but2.Content = 2;
             but2.Click += But2_Click;
-            but2.Margin = new Thickness(10);
             Grid.SetRow(but2, 4);
             Grid.SetColumn(but2, 3);
             gameGrid.Children.Add(but2);
@@ -333,7 +390,6 @@ namespace BreakBrainGame
             but3 = LVL2_CreateButton();
             but3.Content = 3;
             but3.Click += But3_Click;
-            but3.Margin = new Thickness(10);
             Grid.SetRow(but3, 3);
             Grid.SetColumn(but3, 7);
             gameGrid.Children.Add(but3);
@@ -349,7 +405,6 @@ namespace BreakBrainGame
             but4 = LVL2_CreateButton();
             but4.Content = 4;
             but4.Click += But4_Click;
-            but4.Margin = new Thickness(10);
             Grid.SetRow(but4, 0);
             Grid.SetColumn(but4, 6);
             gameGrid.Children.Add(but4);
@@ -360,7 +415,6 @@ namespace BreakBrainGame
             butExit.Content = "Next";
             butExit.IsEnabled = false;
             butExit.Click += ButExit_Click;
-            butExit.Margin = new Thickness(10);
             Grid.SetRow(butExit, 2);
             Grid.SetColumn(butExit, 0);
             gameGrid.Children.Add(butExit);
@@ -386,6 +440,10 @@ namespace BreakBrainGame
             gameGrid.Children.Add(txtbox);
 
             CreateLVLlabel();
+
+            MessageBox.Show("Ты прошёл 1 уровень. Так держать!");
+            messageValue++;
+            CheckMessageValue();
         }
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------- //
@@ -432,19 +490,29 @@ namespace BreakBrainGame
         private void AnswerComboBox1_SelectionChanged(object sender, SelectionChangedEventArgs e) { 
             if (answerComboBox1.SelectedIndex == 0) {
                 MessageBox.Show(goodAnswer[rnd.Next(0, goodAnswer.Length)]);
+                messageValue++;
+                CheckMessageValue();
                 boolAnswer1 = true;
             }
-             else
+            else {
                 MessageBox.Show(badAnswer[rnd.Next(0, badAnswer.Length)]);
+                messageValue++;
+                CheckMessageValue();
+            }
             CheckAnswers();
         } 
         private void AnswerComboBox2_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             if (answerComboBox2.SelectedIndex == 2) {
                 MessageBox.Show(goodAnswer[rnd.Next(0, goodAnswer.Length)]);
+                messageValue++;
+                CheckMessageValue();
                 boolAnswer2 = true;
             }
-            else
+            else {
                 MessageBox.Show(badAnswer[rnd.Next(0, badAnswer.Length)]);
+                messageValue++;
+                CheckMessageValue();
+            }
             CheckAnswers();
         } 
         private void AnswerComboBox3_SelectionChanged(object sender, SelectionChangedEventArgs e) {
@@ -452,26 +520,39 @@ namespace BreakBrainGame
                 MessageBox.Show(goodAnswer[rnd.Next(0, goodAnswer.Length)]);
                 boolAnswer3 = true;
             }
-            else
+            else {
                 MessageBox.Show(badAnswer[rnd.Next(0, badAnswer.Length)]);
+                messageValue++;
+                CheckMessageValue();
+            }
             CheckAnswers();
         }
         private void AnswerComboBox4_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             if (answerComboBox4.SelectedIndex == 1) {
                 MessageBox.Show(goodAnswer[rnd.Next(0, goodAnswer.Length)]);
+                messageValue++;
+                CheckMessageValue();
                 boolAnswer4 = true;
             }
-            else
+            else {
                 MessageBox.Show(badAnswer[rnd.Next(0, badAnswer.Length)]);
+                messageValue++;
+                CheckMessageValue();
+            }
             CheckAnswers();
         }
         private void AnswerComboBox5_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             if (answerComboBox5.SelectedIndex == 0) {
                 MessageBox.Show(goodAnswer[rnd.Next(0, goodAnswer.Length)]);
+                messageValue++;
+                CheckMessageValue();
                 boolAnswer5 = true;
             }
-            else
+            else {
                 MessageBox.Show(badAnswer[rnd.Next(0, badAnswer.Length)]);
+                messageValue++;
+                CheckMessageValue();
+            }
             CheckAnswers();
         }
         //   Don’t repeat yourself  так сказать
@@ -580,6 +661,10 @@ namespace BreakBrainGame
             gameGrid.Children.Add(exitButtonlvl3);
 
             CreateLVLlabel();
+
+            MessageBox.Show("Ты разгадал загадку на 2 уровене. Да ты крут!");
+            messageValue++;
+            CheckMessageValue();
         }
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------- //
@@ -590,41 +675,11 @@ namespace BreakBrainGame
         void LVL4_Load()
         {
             CreateLVLlabel();
+
+            MessageBox.Show("Думаю это было просто, не так ли?) Продолжаем играть!");
+            messageValue++;
+            CheckMessageValue();
         }
 
-
-        /// <summary>
-        /// Полностью очищает форму.
-        /// </summary>
-        public void ClearLvL() {
-            if(gameGrid.Children.Count != 0) {
-                int lenghtGridChildren = gameGrid.Children.Count - 1;           // Количество элементов в игровом Гриде.
-                for (int i = lenghtGridChildren; i >= 0; i--)
-                    gameGrid.Children.RemoveAt(i);
-            }
-            if(gameGrid.ColumnDefinitions.Count != 0) {
-                int countGridColumn = gameGrid.ColumnDefinitions.Count - 1;     // Количество столбцов в игровом Гриде.
-                for (int i = countGridColumn; i >= 0; i--)
-                    gameGrid.ColumnDefinitions.RemoveAt(i);
-            }
-            if (gameGrid.RowDefinitions.Count != 0) {
-                int countGridrow = gameGrid.RowDefinitions.Count - 1;           // Количество строк в игровом Гриде.
-                for (int i = countGridrow; i >= 0; i--)
-                    gameGrid.RowDefinitions.RemoveAt(i);
-            }
-            if (numberLVLGrid.Children.Count != 0) {
-                int lenghtGridChildren = numberLVLGrid.Children.Count - 1;      // Количество элементов в Гриде с номером уровня.
-                for (int i = lenghtGridChildren; i >= 0; i--)
-                    numberLVLGrid.Children.RemoveAt(i);
-            }
-        }
-
-        /// <summary>
-        /// Вывод номера уровня.
-        /// </summary>
-        public void CreateLVLlabel() {
-            numberLVLlabel = new Label { Content = $"Уровень {numberLVL}", FontSize = 15, };
-            numberLVLGrid.Children.Add(numberLVLlabel);
-        }
     }
 }
