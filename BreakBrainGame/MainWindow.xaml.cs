@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
+using System.Windows.Media;
 
 namespace BreakBrainGame
 {
@@ -14,14 +16,16 @@ namespace BreakBrainGame
     public partial class MainWindow : Window, IGame
     {
         int messageValue = 0;
+        Button nextLvlButton;
 
         void CheckMessageValue() {
             messageValue++;
-            switch (messageValue)
-            {
+            switch (messageValue) {
                 case 6:  MessageBox.Show("Прости если я тебе мешаю играть)"); messageValue++; break;
                 case 10: MessageBox.Show("Ну как тебе игра?)"); messageValue++; break;
-                case 15: MessageBox.Show("Я тебе ещё не надоел?)"); messageValue++; break;
+                case 14: MessageBox.Show("Хмм, я тебя не дооценил, ты всё ещё играешь"); messageValue++; break;
+                case 19: MessageBox.Show("Слушай, у тебя стальные нервы, если ты ещё продолжаешь играть)"); messageValue++; break;
+                case 24: MessageBox.Show("Я тебе ещё не надоел?)"); messageValue++; break;
             }
         }
 
@@ -71,13 +75,14 @@ namespace BreakBrainGame
         DispatcherTimer timer;
         const int butSize = 100;
 
-        public MainWindow()
-        {
+        public MainWindow() {
             InitializeComponent();
-            LVL1_Load();
+            //LVL1_Load();
             //LVL2_Load();
             //LVL3_Load();
             //LVL4_Load();
+            //LVL5_Load();
+            LVL6_Load();
         }
 
         /// <summary>
@@ -186,7 +191,7 @@ namespace BreakBrainGame
 // ---------------------------------------------------------------------------------------------------------------------------------------------------- //
 
         // Необходимые поля для 2 уровня
-        Button but1, but2, but3, but4, exitButtonlvl2;
+        Button but1, but2, but3, but4;
         Label lbl1, lbl2, lbl3, lbl4, lblHint;
         int but1Click = 0, but2Click = 0, but3Click = 0, but4Click = 0;
         TextBox txtbox;
@@ -263,7 +268,7 @@ namespace BreakBrainGame
         }
 
         private void Txtbox_TextChanged(object sender, TextChangedEventArgs e) {
-            if (txtbox.Text == "103148") { exitButtonlvl2.IsEnabled = true; }
+            if (txtbox.Text == "103148") { nextLvlButton.IsEnabled = true; }
         }
 
         /// <summary>
@@ -331,13 +336,13 @@ namespace BreakBrainGame
             gameGrid.Children.Add(but4);
 
             /// Кнопка перехода на следующий уровень
-            exitButtonlvl2 = LVL2_CreateButton();
-            exitButtonlvl2.Content = "Next";
-            exitButtonlvl2.IsEnabled = false;
-            exitButtonlvl2.Click += (s, e) => { ClearLvL(); LVL3_Load(); };
-            Grid.SetRow(exitButtonlvl2, 2);
-            Grid.SetColumn(exitButtonlvl2, 0);
-            gameGrid.Children.Add(exitButtonlvl2);
+            nextLvlButton = LVL2_CreateButton();
+            nextLvlButton.Content = "Next";
+            nextLvlButton.IsEnabled = false;
+            nextLvlButton.Click += (s, e) => { ClearLvL(); LVL3_Load(); };
+            Grid.SetRow(nextLvlButton, 2);
+            Grid.SetColumn(nextLvlButton, 0);
+            gameGrid.Children.Add(nextLvlButton);
 
             /// Лейбл с подсказкой
             lblHint = LVL2_CreateLabel();
@@ -369,12 +374,10 @@ namespace BreakBrainGame
         // Необходимые поля для 3 уровня
         string[] badAnswer = File.ReadAllLines($"../../../BadAnswers.txt");
         string[] goodAnswer = File.ReadAllLines($"../../../GoodAnswers.txt");
-        Random rnd;
 
         Label questionLabel1, questionLabel2, questionLabel3, questionLabel4, questionLabel5;
         ComboBox answerComboBox1, answerComboBox2, answerComboBox3, answerComboBox4, answerComboBox5;
         bool boolAnswer1 = false, boolAnswer2 = false, boolAnswer3 = false, boolAnswer4 = false, boolAnswer5 = false;
-        Button exitButtonlvl3;
         
         int[] selectedIndexOld = new int[5], selectedIndexNew;
 
@@ -402,29 +405,28 @@ namespace BreakBrainGame
         }
 
         void ChangeCheckBox() {
-            rnd = new Random();
             for (int i = 0; i < selectedIndexNew.Length; i++)
                 if(selectedIndexNew[i] != selectedIndexOld[i])
                     switch (i) {
                         case 0:
-                            if (answerComboBox1.SelectedIndex == 0) { MessageBox.Show(goodAnswer[rnd.Next(0, goodAnswer.Length)]); boolAnswer1 = true; }
-                            else { MessageBox.Show(badAnswer[rnd.Next(0, badAnswer.Length)]); boolAnswer1 = false; }
+                            if (answerComboBox1.SelectedIndex == 0) { MessageBox.Show(goodAnswer[new Random().Next(0, goodAnswer.Length)]); boolAnswer1 = true; }
+                            else { MessageBox.Show(badAnswer[new Random().Next(0, badAnswer.Length)]); boolAnswer1 = false; }
                             break;
                         case 1:
-                            if (answerComboBox2.SelectedIndex == 2) { MessageBox.Show(goodAnswer[rnd.Next(0, goodAnswer.Length)]); boolAnswer2 = true; }
-                            else { MessageBox.Show(badAnswer[rnd.Next(0, badAnswer.Length)]); boolAnswer2 = false; }
+                            if (answerComboBox2.SelectedIndex == 2) { MessageBox.Show(goodAnswer[new Random().Next(0, goodAnswer.Length)]); boolAnswer2 = true; }
+                            else { MessageBox.Show(badAnswer[new Random().Next(0, badAnswer.Length)]); boolAnswer2 = false; }
                             break;
                         case 2:
-                            if (answerComboBox2.SelectedIndex == 2) { MessageBox.Show(goodAnswer[rnd.Next(0, goodAnswer.Length)]); boolAnswer3 = true; }
-                            else { MessageBox.Show(badAnswer[rnd.Next(0, badAnswer.Length)]); boolAnswer3 = false; }
+                            if (answerComboBox2.SelectedIndex == 2) { MessageBox.Show(goodAnswer[new Random().Next(0, goodAnswer.Length)]); boolAnswer3 = true; }
+                            else { MessageBox.Show(badAnswer[new Random().Next(0, badAnswer.Length)]); boolAnswer3 = false; }
                             break;
                         case 3:
-                            if (answerComboBox4.SelectedIndex == 1) { MessageBox.Show(goodAnswer[rnd.Next(0, goodAnswer.Length)]); boolAnswer4 = true; }
-                            else { MessageBox.Show(badAnswer[rnd.Next(0, badAnswer.Length)]); boolAnswer4 = false; }
+                            if (answerComboBox4.SelectedIndex == 1) { MessageBox.Show(goodAnswer[new Random().Next(0, goodAnswer.Length)]); boolAnswer4 = true; }
+                            else { MessageBox.Show(badAnswer[new Random().Next(0, badAnswer.Length)]); boolAnswer4 = false; }
                             break;
                         case 4:
-                            if (answerComboBox5.SelectedIndex == 0) { MessageBox.Show(goodAnswer[rnd.Next(0, goodAnswer.Length)]); boolAnswer5 = true; }
-                            else { MessageBox.Show(badAnswer[rnd.Next(0, badAnswer.Length)]); boolAnswer5 = false; }
+                            if (answerComboBox5.SelectedIndex == 0) { MessageBox.Show(goodAnswer[new Random().Next(0, goodAnswer.Length)]); boolAnswer5 = true; }
+                            else { MessageBox.Show(badAnswer[new Random().Next(0, badAnswer.Length)]); boolAnswer5 = false; }
                             break;
                     }
             CheckAnswers();
@@ -436,16 +438,15 @@ namespace BreakBrainGame
 
         void CheckAnswers() {
             if (boolAnswer1 && boolAnswer2 && boolAnswer3 && boolAnswer4 && boolAnswer5)
-                exitButtonlvl3.IsEnabled = true;
+                nextLvlButton.IsEnabled = true;
             else
-                exitButtonlvl3.IsEnabled = false;
+                nextLvlButton.IsEnabled = false;
         }
 
         /// <summary>
         /// Загружает третий уровень на форму.
         /// </summary>
-        public void LVL3_Load()
-        {
+        public void LVL3_Load() {
             for (int i = 0; i < 4; gameGrid.ColumnDefinitions.Add(new ColumnDefinition()), i++) ;
             for (int i = 0; i < 6; gameGrid.RowDefinitions.Add(new RowDefinition()), i++) ;
 
@@ -515,12 +516,12 @@ namespace BreakBrainGame
             gameGrid.Children.Add(answerComboBox5);
 
             // Кнопка для перехода на следующий уровень
-            exitButtonlvl3 = new Button { IsEnabled = false, Content = "Next Level", FontSize = 15, };
-            exitButtonlvl3.Click += (s, e) => { ClearLvL(); LVL4_Load(); };
-            Grid.SetColumn(exitButtonlvl3, 1);
-            Grid.SetColumnSpan(exitButtonlvl3, 2);
-            Grid.SetRow(exitButtonlvl3, 5);
-            gameGrid.Children.Add(exitButtonlvl3);
+            nextLvlButton = new Button { IsEnabled = false, Content = "Next Level", FontSize = 15, };
+            nextLvlButton.Click += (s, e) => { ClearLvL(); LVL4_Load(); };
+            Grid.SetColumn(nextLvlButton, 1);
+            Grid.SetColumnSpan(nextLvlButton, 2);
+            Grid.SetRow(nextLvlButton, 5);
+            gameGrid.Children.Add(nextLvlButton);
 
             selectedIndexOld[0] = answerComboBox1.SelectedIndex;
             selectedIndexOld[1] = answerComboBox2.SelectedIndex;
@@ -540,7 +541,6 @@ namespace BreakBrainGame
         RadioButton[] radio_group1 = new RadioButton[5];
         RadioButton[] radio_group2 = new RadioButton[5];
         CheckBox[,] checkBoxes = new CheckBox[3,5];
-        Button exitButtonlvl4;
         bool checkBox1Checked = false, checkBox2Checked = false, checkBox3Checked = false, checkBox4Checked = false, radioBut1Cheked = false, radioBut2Cheked = false;
 
         void EmbedRadioBut(RadioButton[] rb, int columnCount, int row, string groupName) {
@@ -583,7 +583,6 @@ namespace BreakBrainGame
                 radio_group1[i].IsEnabled = false;
             }
         }
-
         private void CheckBox_1_4_Checked(object sender, RoutedEventArgs e) {
             for (int i = 0; i < radio_group2.Length; i++)
                 radio_group2[i].IsEnabled = true;
@@ -600,24 +599,34 @@ namespace BreakBrainGame
                 for (int j = 0; j < 5; j++)
                     if (checkBoxes[i, j] != checkBoxes[1, 2])  
                         checkBoxes[i, j].Visibility = Visibility.Hidden;
-            exitButtonlvl4.Visibility = Visibility.Visible;
+            nextLvlButton.Visibility = Visibility.Visible;
         }
         private void CheckBox_1_2_Unchecked(object sender, RoutedEventArgs e) {
             for (int i = 0; i < 3; i++)
                 for (int j = 0; j < 5; j++)
                     checkBoxes[i, j].Visibility = Visibility.Visible;
-            exitButtonlvl4.Visibility = Visibility.Hidden;
+            nextLvlButton.Visibility = Visibility.Hidden;
+        }
+        private void CheckBox_2_2_Checked(object sender, RoutedEventArgs e) {
+            for (int i = 0; i < 3; i++)
+                for (int j = 0; j < 5; j++)
+                    checkBoxes[i, j].IsChecked = false;
+            for (int i = 0; i < radio_group1.Length; i++)
+                radio_group1[i].IsChecked = false;
+            for (int i = 0; i < radio_group2.Length; i++)
+                radio_group2[i].IsChecked = false;
+            MessageBox.Show("Хыхых, всёже ты сюда нажал)");
+            CheckMessageValue();
         }
 
         private void CompleteLVLCheck(object sender, RoutedEventArgs e) {
             if (checkBox1Checked && checkBox2Checked && checkBox3Checked && checkBox4Checked && radioBut1Cheked && radioBut2Cheked)
-                exitButtonlvl4.IsEnabled = true;
+                nextLvlButton.IsEnabled = true;
             else 
-                exitButtonlvl4.IsEnabled = false;
+                nextLvlButton.IsEnabled = false;
         }
 
-        void LVL4_Load()
-        {
+        void LVL4_Load() {
             for (int i = 0; i < 5; gameGrid.ColumnDefinitions.Add(new ColumnDefinition()), i++) ;
             for (int i = 0; i < 5; gameGrid.RowDefinitions.Add(new RowDefinition()), i++) ;
 
@@ -625,11 +634,11 @@ namespace BreakBrainGame
             EmbedRadioBut(radio_group2, 5, 4, "group2");
             EmbedCheckBox(checkBoxes, 3, 5);
 
-            exitButtonlvl4 = new Button { Content = "Next", Visibility = Visibility.Hidden, IsEnabled = false, FontSize = 18 };
-            exitButtonlvl4.Click += (s, e) => { ClearLvL(); LVL5_Load(); };
-            Grid.SetColumn(exitButtonlvl4, 2);
-            Grid.SetRow(exitButtonlvl4, 3);
-            gameGrid.Children.Add(exitButtonlvl4);
+            nextLvlButton = new Button { Content = "Next", Visibility = Visibility.Hidden, IsEnabled = false, FontSize = 18 };
+            nextLvlButton.Click += (s, e) => { ClearLvL(); LVL5_Load(); };
+            Grid.SetColumn(nextLvlButton, 2);
+            Grid.SetRow(nextLvlButton, 3);
+            gameGrid.Children.Add(nextLvlButton);
 
             checkBoxes[0, 1].Checked += CheckBox_0_1_Checked;
             checkBoxes[0, 1].Unchecked += CheckBox_0_1_Unchecked;
@@ -639,6 +648,8 @@ namespace BreakBrainGame
 
             checkBoxes[1, 2].Checked += CheckBox_1_2_Checked;
             checkBoxes[1, 2].Unchecked += CheckBox_1_2_Unchecked;
+
+            checkBoxes[2, 2].Checked += CheckBox_2_2_Checked;
 
             checkBoxes[0, 0].Checked += (s, e) => checkBox1Checked = true;
             checkBoxes[0, 0].Unchecked += (s, e) => checkBox1Checked = false;
@@ -663,14 +674,299 @@ namespace BreakBrainGame
             CheckMessageValue();
         }
 
-// ---------------------------------------------------------------------------------------------------------------------------------------------------- //
-// ---------------------------------------------------------------------------------------------------------------------------------------------------- //
-// ---------------------------------------------------------------------------------------------------------------------------------------------------- //
+        // ---------------------------------------------------------------------------------------------------------------------------------------------------- //
+        // ---------------------------------------------------------------------------------------------------------------------------------------------------- //
+        // ---------------------------------------------------------------------------------------------------------------------------------------------------- //
 
-        void LVL5_Load()
-        {
+        ListBox listBoxProducer, listBoxModels, listBoxPrices;
+        ListBox incorrectListBoxProducer, incorrectListBoxModels, incorrectListBoxPrices;
+        RadioButton radioButName, radioButModel, radioButPrice;
+        bool[] corrects = new bool[6];
+
+        void LVL5_CreateCorrectListBoxes() {
+            listBoxProducer = new ListBox { Visibility = Visibility.Hidden };
+            TextBlock textBlockProducer = new TextBlock {
+                Text = "Производитель",
+                FontWeight = FontWeights.Bold,
+                TextDecorations = TextDecorations.Underline,
+            };
+            listBoxProducer.Items.Add(textBlockProducer);
+            LVL5_FullInCorrectProducer();
+            Grid.SetColumn(listBoxProducer, 3);
+            Grid.SetRow(listBoxProducer, 0);
+            Grid.SetRowSpan(listBoxProducer, 3);
+            gameGrid.Children.Add(listBoxProducer);
+
+            listBoxModels = new ListBox { Visibility = Visibility.Hidden };
+            TextBlock textBlockModel = new TextBlock {
+                Text = "Модель",
+                FontWeight = FontWeights.Bold,
+                TextDecorations = TextDecorations.Underline,
+            };
+            listBoxModels.Items.Add(textBlockModel);
+            LVL5_FullInCorrectModels();
+            Grid.SetColumn(listBoxModels, 3);
+            Grid.SetRow(listBoxModels, 0);
+            Grid.SetRowSpan(listBoxModels, 3);
+            gameGrid.Children.Add(listBoxModels);
+
+            listBoxPrices = new ListBox { Visibility = Visibility.Hidden };
+            TextBlock textBlockPrice = new TextBlock {
+                Text = "Цена",
+                FontWeight = FontWeights.Bold,
+                TextDecorations = TextDecorations.Underline,
+            };
+            listBoxPrices.Items.Add(textBlockPrice);
+            LVL5_FullInCorrectPrice();
+            Grid.SetColumn(listBoxPrices, 3);
+            Grid.SetRow(listBoxPrices, 0);
+            Grid.SetRowSpan(listBoxPrices, 3);
+            gameGrid.Children.Add(listBoxPrices);
+        }
+        void LVL5_CreateRadioBut() {
+            radioButName = new RadioButton { VerticalAlignment = VerticalAlignment.Center, HorizontalAlignment = HorizontalAlignment.Center };
+            radioButName.Checked += (s, e) => {
+                listBoxProducer.Visibility = Visibility.Visible;
+                listBoxModels.Visibility = Visibility.Hidden;
+                listBoxPrices.Visibility = Visibility.Hidden;
+            };
+            Grid.SetColumn(radioButName, 1);
+            Grid.SetRow(radioButName, 3);
+            gameGrid.Children.Add(radioButName);
+
+            radioButModel = new RadioButton { VerticalAlignment = VerticalAlignment.Center, HorizontalAlignment = HorizontalAlignment.Center };
+            radioButModel.Checked += (s, e) => {
+                listBoxProducer.Visibility = Visibility.Hidden;
+                listBoxModels.Visibility = Visibility.Visible;
+                listBoxPrices.Visibility = Visibility.Hidden;
+            };
+            Grid.SetColumn(radioButModel, 2);
+            Grid.SetRow(radioButModel, 3);
+            gameGrid.Children.Add(radioButModel);
+
+            radioButPrice = new RadioButton { VerticalAlignment = VerticalAlignment.Center, HorizontalAlignment = HorizontalAlignment.Center };
+            radioButPrice.Checked += (s, e) => {
+                listBoxProducer.Visibility = Visibility.Hidden;
+                listBoxModels.Visibility = Visibility.Hidden;
+                listBoxPrices.Visibility = Visibility.Visible;
+            };
+            Grid.SetColumn(radioButPrice, 3);
+            Grid.SetRow(radioButPrice, 3);
+            gameGrid.Children.Add(radioButPrice);
+        }
+        void LVL5_CreateIncorrectListBoxes() {
+            incorrectListBoxProducer = new ListBox();
+            TextBlock textBlockProducer = new TextBlock {
+                Text = "Производитель",
+                FontWeight = FontWeights.Bold,
+                TextDecorations = TextDecorations.Underline,
+            };
+            incorrectListBoxProducer.Items.Add(textBlockProducer);
+            LVL5_FullInIncorrectProducer();
+            Grid.SetColumn(incorrectListBoxProducer, 0);
+            Grid.SetRow(incorrectListBoxProducer, 0);
+            Grid.SetRowSpan(incorrectListBoxProducer, 3);
+            gameGrid.Children.Add(incorrectListBoxProducer);
+
+            incorrectListBoxModels = new ListBox();
+            TextBlock textBlockModel = new TextBlock {
+                Text = "Модель",
+                FontWeight = FontWeights.Bold,
+                TextDecorations = TextDecorations.Underline,
+            };
+            incorrectListBoxModels.Items.Add(textBlockModel);
+            LVL5_FullInIncorrectModel();
+            Grid.SetColumn(incorrectListBoxModels, 1);
+            Grid.SetRow(incorrectListBoxModels, 0);
+            Grid.SetRowSpan(incorrectListBoxModels, 3);
+            gameGrid.Children.Add(incorrectListBoxModels);
+
+            incorrectListBoxPrices = new ListBox();
+            TextBlock textBlockPrice = new TextBlock {
+                Text = "Цена",
+                FontWeight = FontWeights.Bold,
+                TextDecorations = TextDecorations.Underline,
+            };
+            incorrectListBoxPrices.Items.Add(textBlockPrice);
+            LVL5_FullInIncorrectPrice();
+            Grid.SetColumn(incorrectListBoxPrices, 2);
+            Grid.SetRow(incorrectListBoxPrices, 0);
+            Grid.SetRowSpan(incorrectListBoxPrices, 3);
+            gameGrid.Children.Add(incorrectListBoxPrices);
+        }
+
+
+        void LVL5_FullInIncorrectProducer() {
+            Label apple = new Label { Content = "Aplle" };
+            apple.MouseDoubleClick += (s, e) => { apple.Content = "Apple"; corrects[0] = true; CheckBoolCorrects(); };
+            incorrectListBoxProducer.Items.Add(apple);
+            incorrectListBoxProducer.Items.Add(new Label { Content = "Samsung" });
+            incorrectListBoxProducer.Items.Add(new Label { Content = "Xiaomi" });
+            incorrectListBoxProducer.Items.Add(new Label { Content = "HUAWEI" });
+            Label lenovo = new Label { Content = "Lenowo" };
+            lenovo.MouseDoubleClick += (s, e) => { lenovo.Content = "Lenovo"; corrects[1] = true; CheckBoolCorrects(); };
+            incorrectListBoxProducer.Items.Add(lenovo);
+            incorrectListBoxProducer.Items.Add(new Label { Content = "LG" });
+        }
+        void LVL5_FullInIncorrectModel() {
+            incorrectListBoxModels.Items.Add(new Label { Content = "iPhone 11 64GB" });
+            Label samsung = new Label { Content = "Galaxy A51 64MB" };
+            samsung.MouseDoubleClick += (s, e) => { samsung.Content = "Galaxy A51 64GB"; corrects[2] = true; CheckBoolCorrects(); };
+            incorrectListBoxModels.Items.Add(samsung);
+            Label xiaomi = new Label { Content = "Redmi 8A 2/232GB" };
+            xiaomi.MouseDoubleClick += (s, e) => { xiaomi.Content = "Redmi 8A 2/32GB"; corrects[3] = true; CheckBoolCorrects(); };
+            incorrectListBoxModels.Items.Add(xiaomi);
+            incorrectListBoxModels.Items.Add(new Label { Content = "P smart Z 4/64GB" });
+            incorrectListBoxModels.Items.Add(new Label { Content = "A5 3 / 32GB" });
+            Label lg = new Label { Content = "V40 TnihQ 6/128GB" };
+            lg.MouseDoubleClick += (s, e) => { lg.Content = "V40 ThinQ 6/128GB"; corrects[4] = true; CheckBoolCorrects(); };
+            incorrectListBoxModels.Items.Add(lg);
+        }
+        void LVL5_FullInIncorrectPrice() {
+            incorrectListBoxPrices.Items.Add(new Label { Content = "54.290 ₽" });
+            incorrectListBoxPrices.Items.Add(new Label { Content = "15.490 ₽" });
+            incorrectListBoxPrices.Items.Add(new Label { Content = "7.140 ₽" });
+            incorrectListBoxPrices.Items.Add(new Label { Content = "10.490 ₽" });
+            Label lenovo = new Label { Content = "$ 8.500" };
+            lenovo.MouseDoubleClick += (s, e) => { lenovo.Content = "8.500 ₽"; corrects[5] = true; CheckBoolCorrects(); };
+            incorrectListBoxPrices.Items.Add(lenovo);
+            incorrectListBoxPrices.Items.Add(new Label { Content = "33.980 ₽" });
+        }
+
+        void CheckBoolCorrects() {
+            if(corrects[0] && corrects[1] && corrects[2] && corrects[3] && corrects[4] && corrects[5])
+                nextLvlButton.IsEnabled = true;
+        }
+
+        // Правильные
+        void LVL5_FullInCorrectProducer() {
+            listBoxProducer.Items.Add("Apple");
+            listBoxProducer.Items.Add("Samsung");
+            listBoxProducer.Items.Add("Xiaomi");
+            listBoxProducer.Items.Add("HUAWEI");
+            listBoxProducer.Items.Add("Lenovo");
+            listBoxProducer.Items.Add("LG");
+        }
+        void LVL5_FullInCorrectModels() {
+            listBoxModels.Items.Add("iPhone 11 64GB");
+            listBoxModels.Items.Add("Galaxy A51 64GB");
+            listBoxModels.Items.Add("Redmi 8A 2/32GB");
+            listBoxModels.Items.Add("P smart Z 4/64GB");
+            listBoxModels.Items.Add("A5 3/32GB");
+            listBoxModels.Items.Add("V40 ThinQ 6/128GB");
+        }
+        void LVL5_FullInCorrectPrice() {
+            listBoxPrices.Items.Add("54.290 ₽");
+            listBoxPrices.Items.Add("15.490 ₽");
+            listBoxPrices.Items.Add("7.140 ₽");
+            listBoxPrices.Items.Add("10.490 ₽");
+            listBoxPrices.Items.Add("8.500 ₽");
+            listBoxPrices.Items.Add("33.980 ₽");
+        }
+        // Это всё можно запихать в файлы, но мне лень
+
+        void LVL5_Load() {
+            for (int i = 0; i < 4; gameGrid.ColumnDefinitions.Add(new ColumnDefinition()), i++) ;
+            for (int i = 0; i < 4; gameGrid.RowDefinitions.Add(new RowDefinition()), i++) ;
+
+            LVL5_CreateCorrectListBoxes();
+            LVL5_CreateRadioBut();
+            LVL5_CreateIncorrectListBoxes();
+
+            nextLvlButton = new Button { Content = "Next", FontSize = 20, Margin = new Thickness(5), IsEnabled = false };
+            nextLvlButton.Click += (s, e) => { ClearLvL(); LVL6_Load(); };
+            Grid.SetColumn(nextLvlButton, 0);
+            Grid.SetRow(nextLvlButton, 3);
+            gameGrid.Children.Add(nextLvlButton);
+
             CreateLVLlabel();
-            MessageBox.Show("");
+            MessageBox.Show("Здесь тебе придётся исправлять ошибки) удачи))");
+            CheckMessageValue();
+        }
+
+        // ---------------------------------------------------------------------------------------------------------------------------------------------------- //
+        // ---------------------------------------------------------------------------------------------------------------------------------------------------- //
+        // ---------------------------------------------------------------------------------------------------------------------------------------------------- //
+
+        ContextMenu mainContext;
+        Grid lvl6Grid;
+        MenuItem[] firstItem, secondItem, thirdItem, fourthItem, fifthItem;
+
+        MenuItem LVL6_AddContext(MenuItem[] menu, string itemHeader, string subItem1Header, string subItem2Header, string subItem3Header, string subItem4Header, string subItem5Header) {
+            MenuItem mItem = new MenuItem { Header = itemHeader };
+
+            menu[0] = new MenuItem { Header = subItem1Header };
+            menu[0].Click += MenuItem_Click;
+                mItem.Items.Add(menu[0]);
+            menu[1] = new MenuItem { Header = subItem2Header };
+            menu[1].Click += MenuItem_Click;
+            mItem.Items.Add(menu[1]);
+            menu[2] = new MenuItem { Header = subItem3Header };
+            menu[2].Click += MenuItem_Click;
+                mItem.Items.Add(menu[2]);
+            menu[3] = new MenuItem { Header = subItem4Header };
+            menu[3].Click += MenuItem_Click;
+                mItem.Items.Add(menu[3]);
+            menu[4] = new MenuItem { Header = subItem5Header };
+            menu[4].Click += MenuItem_Click;
+                mItem.Items.Add(menu[4]);
+
+            return mItem;
+        }
+
+        private void MenuItem_Click(object sender, RoutedEventArgs e) {
+            MessageBox.Show("Не туда)");
+        }
+
+        void LVL6_Load() {
+            lvl6Grid = new Grid();
+            mainContext = new ContextMenu();
+
+            firstItem = new MenuItem[5];
+            MenuItem firstMenuItem  = LVL6_AddContext(firstItem, "Пункт 1", "Подпункт 1", "Подпункт 2", "Подпункт 3", "Подпункт 4", "Подпункт 5");
+            secondItem = new MenuItem[5];
+            MenuItem secondMenuItem = LVL6_AddContext(secondItem, "Пункт 2", "Подпункт 1", "Подпункт 2", "Подпункт 3", "Подпункт 4", "Подпункт 5");
+            thirdItem = new MenuItem[5];
+            MenuItem thirdMenuItem  = LVL6_AddContext(thirdItem, "Пункт 3", "Подпункт 1", "Подпункт 2", "Подпункт 3", "Подпункт 4", "Подпункт 5");
+            fourthItem = new MenuItem[5];
+            MenuItem fourthMenuItem = LVL6_AddContext(fourthItem, "Пункт 4", "Подпункт 1", "Подпункт 2", "Подпункт 3", "Подпункт 4", "Подпункт 5");
+            fifthItem = new MenuItem[5];
+            MenuItem fifthMenuItem  = LVL6_AddContext(fifthItem, "Пункт 5", "Подпункт 1", "Подпункт 2", "Подпункт 3", "Подпункт 4", "Подпункт 5");
+
+            mainContext.Items.Add(firstMenuItem);
+
+            firstItem[4].Click  -= MenuItem_Click;
+            firstItem[4].Click  += (s, e) => { mainContext.Items.Add(secondMenuItem); MessageBox.Show("Хорошее начало!"); };
+
+            secondItem[1].Click -= MenuItem_Click;
+            secondItem[1].Click += (s, e) => { mainContext.Items.Add(thirdMenuItem); MessageBox.Show("Ты на верном пути)"); };
+
+            thirdItem[3].Click  -= MenuItem_Click;
+            thirdItem[3].Click  += (s, e) => { mainContext.Items.Add(fourthMenuItem); MessageBox.Show("Не сдавайся!"); };
+
+            fourthItem[3].Click -= MenuItem_Click;
+            fourthItem[3].Click += (s, e) => { mainContext.Items.Add(fifthMenuItem); MessageBox.Show("Ты почти смог!"); };
+
+            fifthItem[0].Click -= MenuItem_Click;
+            fifthItem[0].Click += (s, e) => { ClearLvL(); LVL7_Load(); };
+
+            lvl6Grid.Background = Brushes.White;
+            lvl6Grid.ContextMenu = mainContext;
+            gameGrid.Children.Add(lvl6Grid);
+
+            CreateLVLlabel();
+            MessageBox.Show("Ты всё таки смог исправить все ошибки, поздравляю)");
+            CheckMessageValue();
+        }
+
+        // ---------------------------------------------------------------------------------------------------------------------------------------------------- //
+        // ---------------------------------------------------------------------------------------------------------------------------------------------------- //
+        // ---------------------------------------------------------------------------------------------------------------------------------------------------- //
+
+        void LVL7_Load() {
+
+            CreateLVLlabel();
+            MessageBox.Show("Ну как?) понравилось бессмысленно тыкать?)");
             CheckMessageValue();
         }
     }
