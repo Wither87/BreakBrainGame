@@ -5,9 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BreakBrainGame"
         mc:Ignorable="d"
-        Title="MainWindow" Height="600" Width="720">
+        Title="BreakBrainGame" Height="600" Width="720">
 
-    <Grid x:Name="mainGrid">
+    <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="100*"/>
             <ColumnDefinition Width="20*"/>
