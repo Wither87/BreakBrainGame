@@ -973,57 +973,33 @@ namespace BreakBrainGame
 
         TreeView treeView;
 
-        void LVL7_CreateTreeView() {
-            treeView = new TreeView();
-            TreeViewItem treeViewItem_1 = new TreeViewItem { Header = "Пункт 1" };
-                TreeViewItem treeViewItem_1_1 = new TreeViewItem { Header = "Подпункт 1" };
-                for (int i = 0; i < 5;)
-                    treeViewItem_1_1.Items.Add(new TreeViewItem { Header = $"Подподпункт {++i}" });
-            treeViewItem_1.Items.Add(treeViewItem_1_1);
-                TreeViewItem treeViewItem_1_2 = new TreeViewItem { Header = "Подпункт 2" };
-                for (int i = 0; i < 5;)
-                    treeViewItem_1_2.Items.Add(new TreeViewItem { Header = $"Подподпункт {++i}" });
-            treeViewItem_1.Items.Add(treeViewItem_1_2);
-                TreeViewItem treeViewItem_1_3 = new TreeViewItem { Header = "Подпункт 3" };
-                for (int i = 0; i < 5;)
-                    treeViewItem_1_3.Items.Add(new TreeViewItem { Header = $"Подподпункт {++i}" });
-            treeViewItem_1.Items.Add(treeViewItem_1_3);
-            treeView.Items.Add(treeViewItem_1);
-
-            TreeViewItem treeViewItem_2 = new TreeViewItem { Header = "Пункт 2" };
-                TreeViewItem treeViewItem_2_1 = new TreeViewItem { Header = "Подпункт 1" };
-                for (int i = 0; i < 5;)
-                    treeViewItem_2_1.Items.Add(new TreeViewItem { Header = $"Подподпункт {++i}" });
-            treeViewItem_2.Items.Add(treeViewItem_2_1);
-                TreeViewItem treeViewItem_2_2 = new TreeViewItem { Header = "Подпункт 2" };
-                for (int i = 0; i < 5;)
-                    treeViewItem_2_2.Items.Add(new TreeViewItem { Header = $"Подподпункт {++i}" });
-            treeViewItem_2.Items.Add(treeViewItem_2_2);
-                TreeViewItem treeViewItem_2_3 = new TreeViewItem { Header = "Подпункт 3" };
-                for (int i = 0; i < 5;)
-                    treeViewItem_2_3.Items.Add(new TreeViewItem { Header = $"Подподпункт {++i}" });
-            treeViewItem_2.Items.Add(treeViewItem_2_3);
-            treeView.Items.Add(treeViewItem_2);
-
-            TreeViewItem treeViewItem_3 = new TreeViewItem { Header = "Пункт 3" };
-                TreeViewItem treeViewItem_3_1 = new TreeViewItem { Header = "Подпункт 1" };
-                for (int i = 0; i < 5;)
-                    treeViewItem_3_1.Items.Add(new TreeViewItem { Header = $"Подподпункт {++i}" });
-            treeViewItem_3.Items.Add(treeViewItem_3_1);
-                TreeViewItem treeViewItem_3_2 = new TreeViewItem { Header = "Подпункт 2" };
-                for (int i = 0; i < 5;)
-                    treeViewItem_3_2.Items.Add(new TreeViewItem { Header = $"Подподпункт {++i}" });
-            treeViewItem_3.Items.Add(treeViewItem_3_2);
-                TreeViewItem treeViewItem_3_3 = new TreeViewItem { Header = "Подпункт 3" };
-                for (int i = 0; i < 5;)
-                    treeViewItem_3_3.Items.Add(new TreeViewItem { Header = $"Подподпункт {++i}" });
-            treeViewItem_3.Items.Add(treeViewItem_3_3);
-            treeView.Items.Add(treeViewItem_3);
-            //treeViewItem_3_2.MouseDoubleClick += (s, e) => { ClearLvL(); LVL8_Load(); };
-            TreeViewItem x = (TreeViewItem)(treeViewItem_3_2.Items[3]);
-            x.MouseDoubleClick += (s, e) => { ClearLvL(); LVL8_Load(); };
+        void LVL7_CreateItems() {
+            for (int i = 0; i < 3;) {
+                TreeViewItem treeViewItem = new TreeViewItem { Header = $"Пункт {++i}" };
+                TreeViewItem treeViewItem_1 = new TreeViewItem { Header = "Подпункт 1" };
+                for (int j = 0; j < 5;)
+                    treeViewItem_1.Items.Add(new TreeViewItem { Header = $"Подподпункт {++j}" });
+                treeViewItem.Items.Add(treeViewItem_1);
+                TreeViewItem treeViewItem_2 = new TreeViewItem { Header = "Подпункт 2" };
+                for (int j = 0; j < 5;)
+                    treeViewItem_2.Items.Add(new TreeViewItem { Header = $"Подподпункт {++j}" });
+                treeViewItem.Items.Add(treeViewItem_2);
+                TreeViewItem treeViewItem_3 = new TreeViewItem { Header = "Подпункт 3" };
+                for (int j = 0; j < 5;)
+                    treeViewItem_3.Items.Add(new TreeViewItem { Header = $"Подподпункт {++j}" });
+                treeViewItem.Items.Add(treeViewItem_3);
+                treeView.Items.Add(treeViewItem);
+            }
         }
 
+        void LVL7_CreateTreeView() {
+            treeView = new TreeView();
+            LVL7_CreateItems();
+            TreeViewItem exitItem = (TreeViewItem)(treeView.Items[1]);
+            exitItem = (TreeViewItem)(exitItem.Items[2]);
+            exitItem = (TreeViewItem)(exitItem.Items[2]);
+            exitItem.MouseDoubleClick += (s, e) => { ClearLvL(); LVL8_Load(); };
+        }
 
         void LVL7_Load() {
 
