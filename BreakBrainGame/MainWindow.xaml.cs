@@ -82,7 +82,8 @@ namespace BreakBrainGame
             //LVL3_Load();
             //LVL4_Load();
             //LVL5_Load();
-            LVL6_Load();
+            //LVL6_Load();
+            LVL7_Load();
         }
 
         /// <summary>
@@ -935,20 +936,27 @@ namespace BreakBrainGame
 
             mainContext.Items.Add(firstMenuItem);
 
-            firstItem[4].Click  -= MenuItem_Click;
-            firstItem[4].Click  += (s, e) => { mainContext.Items.Add(secondMenuItem); MessageBox.Show("Хорошее начало!"); };
+            Random rnd = new Random();
 
-            secondItem[1].Click -= MenuItem_Click;
-            secondItem[1].Click += (s, e) => { mainContext.Items.Add(thirdMenuItem); MessageBox.Show("Ты на верном пути)"); };
+            int num = rnd.Next(0, 5);
+            firstItem[num].Click  -= MenuItem_Click;
+            firstItem[num].Click  += (s, e) => { mainContext.Items.Add(secondMenuItem); MessageBox.Show("Хорошее начало!"); };
 
-            thirdItem[3].Click  -= MenuItem_Click;
-            thirdItem[3].Click  += (s, e) => { mainContext.Items.Add(fourthMenuItem); MessageBox.Show("Не сдавайся!"); };
+            num = rnd.Next(0, 5);
+            secondItem[num].Click -= MenuItem_Click;
+            secondItem[num].Click += (s, e) => { mainContext.Items.Add(thirdMenuItem); MessageBox.Show("Ты на верном пути)"); };
 
-            fourthItem[3].Click -= MenuItem_Click;
-            fourthItem[3].Click += (s, e) => { mainContext.Items.Add(fifthMenuItem); MessageBox.Show("Ты почти смог!"); };
+            num = rnd.Next(0, 5);
+            thirdItem[num].Click  -= MenuItem_Click;
+            thirdItem[num].Click  += (s, e) => { mainContext.Items.Add(fourthMenuItem); MessageBox.Show("Не сдавайся!"); };
 
-            fifthItem[0].Click -= MenuItem_Click;
-            fifthItem[0].Click += (s, e) => { ClearLvL(); LVL7_Load(); };
+            num = rnd.Next(0, 5);
+            fourthItem[num].Click -= MenuItem_Click;
+            fourthItem[num].Click += (s, e) => { mainContext.Items.Add(fifthMenuItem); MessageBox.Show("Ты почти смог!"); };
+
+            num = rnd.Next(0, 5);
+            fifthItem[num].Click -= MenuItem_Click;
+            fifthItem[num].Click += (s, e) => { ClearLvL(); LVL7_Load(); };
 
             lvl6Grid.Background = Brushes.White;
             lvl6Grid.ContextMenu = mainContext;
@@ -963,10 +971,78 @@ namespace BreakBrainGame
         // ---------------------------------------------------------------------------------------------------------------------------------------------------- //
         // ---------------------------------------------------------------------------------------------------------------------------------------------------- //
 
+        TreeView treeView;
+
+        void LVL7_CreateTreeView() {
+            treeView = new TreeView();
+            TreeViewItem treeViewItem_1 = new TreeViewItem { Header = "Пункт 1" };
+                TreeViewItem treeViewItem_1_1 = new TreeViewItem { Header = "Подпункт 1" };
+                for (int i = 0; i < 5;)
+                    treeViewItem_1_1.Items.Add(new TreeViewItem { Header = $"Подподпункт {++i}" });
+            treeViewItem_1.Items.Add(treeViewItem_1_1);
+                TreeViewItem treeViewItem_1_2 = new TreeViewItem { Header = "Подпункт 2" };
+                for (int i = 0; i < 5;)
+                    treeViewItem_1_2.Items.Add(new TreeViewItem { Header = $"Подподпункт {++i}" });
+            treeViewItem_1.Items.Add(treeViewItem_1_2);
+                TreeViewItem treeViewItem_1_3 = new TreeViewItem { Header = "Подпункт 3" };
+                for (int i = 0; i < 5;)
+                    treeViewItem_1_3.Items.Add(new TreeViewItem { Header = $"Подподпункт {++i}" });
+            treeViewItem_1.Items.Add(treeViewItem_1_3);
+            treeView.Items.Add(treeViewItem_1);
+
+            TreeViewItem treeViewItem_2 = new TreeViewItem { Header = "Пункт 2" };
+                TreeViewItem treeViewItem_2_1 = new TreeViewItem { Header = "Подпункт 1" };
+                for (int i = 0; i < 5;)
+                    treeViewItem_2_1.Items.Add(new TreeViewItem { Header = $"Подподпункт {++i}" });
+            treeViewItem_2.Items.Add(treeViewItem_2_1);
+                TreeViewItem treeViewItem_2_2 = new TreeViewItem { Header = "Подпункт 2" };
+                for (int i = 0; i < 5;)
+                    treeViewItem_2_2.Items.Add(new TreeViewItem { Header = $"Подподпункт {++i}" });
+            treeViewItem_2.Items.Add(treeViewItem_2_2);
+                TreeViewItem treeViewItem_2_3 = new TreeViewItem { Header = "Подпункт 3" };
+                for (int i = 0; i < 5;)
+                    treeViewItem_2_3.Items.Add(new TreeViewItem { Header = $"Подподпункт {++i}" });
+            treeViewItem_2.Items.Add(treeViewItem_2_3);
+            treeView.Items.Add(treeViewItem_2);
+
+            TreeViewItem treeViewItem_3 = new TreeViewItem { Header = "Пункт 3" };
+                TreeViewItem treeViewItem_3_1 = new TreeViewItem { Header = "Подпункт 1" };
+                for (int i = 0; i < 5;)
+                    treeViewItem_3_1.Items.Add(new TreeViewItem { Header = $"Подподпункт {++i}" });
+            treeViewItem_3.Items.Add(treeViewItem_3_1);
+                TreeViewItem treeViewItem_3_2 = new TreeViewItem { Header = "Подпункт 2" };
+                for (int i = 0; i < 5;)
+                    treeViewItem_3_2.Items.Add(new TreeViewItem { Header = $"Подподпункт {++i}" });
+            treeViewItem_3.Items.Add(treeViewItem_3_2);
+                TreeViewItem treeViewItem_3_3 = new TreeViewItem { Header = "Подпункт 3" };
+                for (int i = 0; i < 5;)
+                    treeViewItem_3_3.Items.Add(new TreeViewItem { Header = $"Подподпункт {++i}" });
+            treeViewItem_3.Items.Add(treeViewItem_3_3);
+            treeView.Items.Add(treeViewItem_3);
+            //treeViewItem_3_2.MouseDoubleClick += (s, e) => { ClearLvL(); LVL8_Load(); };
+            TreeViewItem x = (TreeViewItem)(treeViewItem_3_2.Items[3]);
+            x.MouseDoubleClick += (s, e) => { ClearLvL(); LVL8_Load(); };
+        }
+
+
         void LVL7_Load() {
+
+            LVL7_CreateTreeView();
+            gameGrid.Children.Add(treeView);
 
             CreateLVLlabel();
             MessageBox.Show("Ну как?) понравилось бессмысленно тыкать?)");
+            MessageBox.Show("Теперь найди нужный итем в деревьях))");
+            CheckMessageValue();
+        }
+
+        // ---------------------------------------------------------------------------------------------------------------------------------------------------- //
+        // ---------------------------------------------------------------------------------------------------------------------------------------------------- //
+        // ---------------------------------------------------------------------------------------------------------------------------------------------------- //
+
+        void LVL8_Load() {
+            CreateLVLlabel();
+            MessageBox.Show("Прости мне мою жестокость)");
             CheckMessageValue();
         }
     }
